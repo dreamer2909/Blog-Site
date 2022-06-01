@@ -1,0 +1,29 @@
+insert into category(id, title)
+values (1, 'QUAN ?I?M - TRANH LU?N')
+
+insert into category(id, title)
+values (2, 'TH? THAO')
+
+insert into category(id, title)
+values (3, 'GAME')
+
+insert into category(id, title)
+values (4, 'PHIM')
+
+insert into category(id, title)
+values (5, 'SÁCH')
+
+insert into category(id, title)
+values (6, 'SÁNG TÁC')
+
+insert into category(id, title)
+values (7, 'ÂM NH?C')
+
+insert into category(id, title)
+values (8, 'DU L?CH - ?M TH?C')
+
+insert into category(id, title)
+values (9, 'KHOA H?C')
+
+insert into category(id, title)
+values (10, 'K? N?NG')

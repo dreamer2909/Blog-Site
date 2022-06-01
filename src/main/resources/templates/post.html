@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Blog</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="p-3 bg-secondary text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none me-lg-auto">
+                    <span class="fs-4">MyBlog</span>
+                </a>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-auto w-50">
+                    <input type="search" class="form-control form-control-dark" placeholder="Tìm kiếm tiêu đề..." aria-label="Search">
+                </form>
+
+                <div th:if="${loggedIn}">
+                    <a href="/post/write"><button type="button" class="btn btn-primary me-2">Viết bài</button></a>
+                </div>
+                <div th:if="${loggedIn}" class="text-end">
+                    <div class="dropdown">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle me-lg-auto" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img th:if="${user != null && user.avatar != null}" th:src="@{'data:image/jpeg;base64,' + ${user.avatar}}" width="32" height="32" class="rounded-circle">
+                            <img th:unless="${user != null && user.avatar != null}" src="https://scontent.fhan3-1.fna.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-7&_nc_sid=7206a8&_nc_ohc=tMdrVb3iZvcAX8WFLjc&_nc_ht=scontent.fhan3-1.fna&oh=00_AT-D6yqwikgu0xvqKNNYbzwcdCy2KWTpeDz62uiUuNNG5w&oe=62BE9A78" width="32" height="32" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser">
+                            <li><a class="dropdown-item" href="/user">Bài viết của bạn</a></li>
+                            <li><a class="dropdown-item" href="#">Bình luận của bạn</a></li>
+                            <li><a class="dropdown-item" href="#">Nháp của bạn</a></li>
+                            <li><a class="dropdown-item" href="/user/setting">Tuỳ chỉnh tài khoản</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" th:action="@{/logout}">
+                                    <input type="submit" class="w-100 btn btn-sm btn-primary" value="Đăng xuất"/>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div th:unless="${loggedIn}" class="text-end">
+                    <a href="/login"><button type="button" class="btn btn-outline-light me-2">Đăng nhập</button></a>
+                    <a href="/register"><button type="button" class="btn btn-warning">Đăng ký</button></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="p-3 bg-secondary">
+        <div class="container">
+            <div class="nav-scroller py-1 mb-2">
+                <nav class="nav d-flex justify-content-between text-white">
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/debate">QUAN ĐIỂM - TRANH LUẬN</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/sport">THỂ THAO</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/game">GAME</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/movie">PHIM</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/book">SÁCH</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/create">SÁNG TÁC</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/music">ÂM NHẠC</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/travel-food">DU LỊCH - ẨM THỰC</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/science">KHOA HỌC</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/skill">KỸ NĂNG</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <main class="main pt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <article class="card mb-4">
+                        <header class="card-header text-center">
+                            <div class="card-meta">
+                                <a style="text-decoration: none;" href="#"><span th:text="${post.getTimeAgo()}"></span></a> trong <a style="text-decoration: none" th:href="@{/post/${post.title}}" th:text="${post.category.title}"></a>
+                            </div>
+                            <a style="text-decoration: none" href="post-image.html">
+                                <h1 class="card-title" th:text="${post.title}">POST TITLE</h1>
+                            </a>
+                        </header>
+
+                        <div class="card-body">
+                            <a th:href="@{'data:image/jpeg;base64,' + ${post.postImage}}"></a>
+                            <div th:remove="tag" th:utext="${post.content}">
+                                CONTENT
+                            </div>
+                            <hr>
+
+                            <h3 th:text="${post.comments.size()} + ' bình luận'">QUANTITY</h3>
+
+                            <div class="d-flex mb-3 p-3 bg-light" th:each="comment : ${post.comments}">
+                                <div class="text-center">
+                                    <img th:if="${comment.user.avatar != null}" class="me-3 rounded-circle" th:src="@{'data:image/jpeg;base64,' + ${comment.user.avatar}}" width="100" height="100">
+                                    <img th:unless="${comment.user.avatar != null}" class="me-3 rounded-circle" src="https://scontent.fhan3-1.fna.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-7&_nc_sid=7206a8&_nc_ohc=tMdrVb3iZvcAX8WFLjc&_nc_ht=scontent.fhan3-1.fna&oh=00_AT-D6yqwikgu0xvqKNNYbzwcdCy2KWTpeDz62uiUuNNG5w&oe=62BE9A78" width="100" height="100">
+                                    <h6 class="mt-1 mb-0 me-3" th:text="${comment.user.displayName}">AUTHOR</h6>
+                                </div>
+                                <div class="flex-grow-1 d-block">
+                                    <p class="mt-3 mb-2" th:text="${comment.content}">CONTENT</p>
+                                    <time class="timeago text-muted" datetime="2021-09-03 20:00" timeago-id="2">8 months ago</time>
+                                    <a class="float-end" href="#"><svg class="svg-inline--fa fa-reply fa-w-16" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="reply" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M8.309 189.836L184.313 37.851C199.719 24.546 224 35.347 224 56.015v80.053c160.629 1.839 288 34.032 288 186.258 0 61.441-39.581 122.309-83.333 154.132-13.653 9.931-33.111-2.533-28.077-18.631 45.344-145.012-21.507-183.51-176.59-185.742V360c0 20.7-24.3 31.453-39.687 18.164l-176.004-152c-11.071-9.562-11.086-26.753 0-36.328z"></path></svg><!-- <span class="fa fa-reply"></span> Font Awesome fontawesome.com --> Reply</a>
+                                </div>
+                            </div>
+
+                            <div class="mt-5">
+                                <h5>Bình luận</h5>
+                                <form method="post" th:action="@{/comment/{title}(title=${post.title})}">
+                                    <textarea name="content" class="form-control mt-3" rows="3" placeholder="Viết bình luận.."></textarea>
+                                    <input type="submit" class="btn btn-success mt-3" th:value="Đăng"></input>
+                                    <input type="hidden" name="postId" th:value="${post.id}">
+                                </form>
+                            </div>
+
+                        </div>
+                    </article><!-- /.card -->
+
+                </div>
+                <div class="col-md-3 ms-auto">
+
+                    <aside class="sidebar">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h4 class="card-title">Tác giả</h4>
+                                <a style="text-decoration: none; display: block" th:href="@{/user/{username}(username=${post.user.username})}" th:text="${post.user.displayName}"></a>
+                                <p class="card-text" th:text="${post.user.profile}"></p>
+                            </div>
+                        </div><!-- /.card -->
+                    </aside>
+
+                    <aside class="sidebar sidebar-sticky">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h4 class="card-title">Tags</h4>
+                                <a class="btn btn-light btn-sm mb-1" href="page-category.html">Journey</a>
+                                <a class="btn btn-light btn-sm mb-1" href="page-category.html">Work</a>
+                                <a class="btn btn-light btn-sm mb-1" href="page-category.html">Lifestype</a>
+                                <a class="btn btn-light btn-sm mb-1" href="page-category.html">Photography</a>
+                                <a class="btn btn-light btn-sm mb-1" href="page-category.html">Food &amp; Drinks</a>
+                            </div>
+                        </div><!-- /.card -->
+                    </aside>
+
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

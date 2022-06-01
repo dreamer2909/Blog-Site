@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MyBlog</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Bootstrap Font Icon CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="p-3 bg-secondary text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none me-lg-auto">
+                    <span class="fs-4">My Blog</span>
+                </a>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-auto w-50">
+                    <input type="search" class="form-control form-control-dark" placeholder="Tìm kiếm tiêu đề..." aria-label="Search">
+                </form>
+
+                <div th:if="${loggedIn}">
+                    <a href="/post/write"><button type="button" class="btn btn-primary me-2">Viết bài</button></a>
+                </div>
+                <div th:if="${loggedIn}" class="text-end">
+                    <div class="dropdown">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle me-lg-auto" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img th:if="${user != null && user.avatar != null}" th:src="@{'data:image/jpeg;base64,' + ${user.avatar}}" width="32" height="32" class="rounded-circle">
+                            <img th:unless="${user != null && user.avatar != null}" src="https://scontent.fhan3-1.fna.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-7&_nc_sid=7206a8&_nc_ohc=tMdrVb3iZvcAX8WFLjc&_nc_ht=scontent.fhan3-1.fna&oh=00_AT-D6yqwikgu0xvqKNNYbzwcdCy2KWTpeDz62uiUuNNG5w&oe=62BE9A78" width="32" height="32" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser">
+                            <li><a class="dropdown-item" href="/user">Bài viết của bạn</a></li>
+                            <li><a class="dropdown-item" href="#">Bình luận của bạn</a></li>
+                            <li><a class="dropdown-item" href="#">Nháp của bạn</a></li>
+                            <li><a class="dropdown-item" href="/user/setting">Tuỳ chỉnh tài khoản</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" th:action="@{/logout}">
+                                    <input type="submit" class="w-100 btn btn-sm btn-primary" value="Đăng xuất"/>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div th:unless="${loggedIn}" class="text-end">
+                    <a href="/login"><button type="button" class="btn btn-outline-light me-2">Đăng nhập</button></a>
+                    <a href="/register"><button type="button" class="btn btn-warning">Đăng ký</button></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container mt-5">
+        <div class="row g-4">
+            <!-- Main content START -->
+            <div class="col-lg-8 vstack gap-4">
+                <!-- My profile START -->
+                <div class="card">
+                    <!-- Cover image -->
+                    <div class="rounded-top">
+                        <img alt="" height="200" width="750" th:src="@{'data:image/jpeg;base64,' + ${user.backgroundImage}}">
+                    </div>
+                    <!-- Card body START -->
+                    <div class="card-body py-0">
+                        <div class="d-sm-flex align-items-start text-center text-sm-start">
+                            <div>
+                                <!-- Avatar -->
+                                <div class="avatar avatar-xxl mt-n5 mb-3">
+                                    <img width="122" height="122" class="avatar-img rounded-circle border border-white border-3" th:src="@{'data:image/jpeg;base64,' + ${user.avatar}}" alt="">
+                                </div>
+                            </div>
+                            <div class="ms-sm-4 mt-sm-3">
+                                <!-- Info -->
+                                <h1 class="mb-0 h5" th:text="${user.displayName}">DISPLAYNAME <i class="bi bi-patch-check-fill text-success small"></i></h1>
+                                <p>250 connections</p>
+                            </div>
+                        </div>
+                        <!-- List profile -->
+                        <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
+                            <li class="list-inline-item"><i class="bi bi-briefcase"></i><span class="ms-2 me-4" th:text="${user.job}"></span></li>
+                            <li class="list-inline-item"><i class="bi bi-geo-alt"></i><span class="ms-2 me-4" th:text="${user.location}"></span></li>
+                            <li class="list-inline-item"><i class="bi bi-calendar2-plus"></i><span class="ms-2" th:if="${user.createdAt}" th:text="'Đã tham gia vào ' + ${user.createdAt.toString().split(' ')[0]}"></span></li>
+                        </ul>
+                    </div>
+                    <!-- Card body END -->
+                    <div class="card-footer mt-3 pt-2 pb-0">
+                        <!-- Nav profile pages -->
+                        <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
+                            <li class="nav-item"> <a class="nav-link active" href=""> Bài viết </a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="my-profile-about.html"> Series </a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="my-profile-connections.html"> Connections <span class="badge bg-success bg-opacity-10 text-success small"> 230</span> </a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="my-profile-media.html"> Media</a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="my-profile-videos.html"> Videos</a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="my-profile-events.html"> Events</a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="my-profile-activity.html"> Activity</a> </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- My profile END -->
+
+                <div th:each="post: ${user.posts}" class="card">
+                    <div class="card-header border-0 pb-0">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <!-- Avatar -->
+                                <div class="avatar avatar-story me-2">
+                                    <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""> </a>
+                                </div>
+                                <!-- Info -->
+                                <div>
+                                    <div class="nav nav-divider">
+                                        <h6 class="nav-item card-title mb-0"> <a style="text-decoration: none" th:href="@{/post/{title}(title=${post.title})}" th:text="${post.title}"></a></h6>
+                                        <span class="nav-item small ms-3" th:text="${post.getTimeString()}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div>
+                            <img width="200" height="auto" th:src="@{'data:image/jpeg;base64,' + ${post.postImage}}">
+                        </div>
+                        <div th:remove="tag" th:utext="${post.summary}">
+                            CONTENT
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main content END -->
+
+            <!-- Right sidebar START -->
+            <div class="col-lg-4">
+
+                <div class="row g-4">
+
+                    <!-- Card START -->
+                    <div class="col-md-6 col-lg-12">
+                        <div class="card">
+                            <div class="card-header border-0 pb-0">
+                                <h5 class="card-title">Thông tin</h5>
+                                <!-- Button modal -->
+                            </div>
+                            <!-- Card body START -->
+                            <div class="card-body position-relative pt-0">
+                                <p th:text="${user.profile}">Profile</p>
+                                <!-- Date time -->
+                                <ul class="list-unstyled mt-3 mb-0">
+                                    <li th:if="${user.job}" class="mb-2"> <i class="bi bi-briefcase fa-fw pe-1"></i> Công việc: <strong th:text="${user.job}"></strong> </li>
+                                    <li th:if="${user.education}" class="mb-2"> <i class="bi bi-mortarboard fa-fw pe-1"></i> Học tại: <strong th:text="${user.education}"></strong> </li>
+                                    <li th:if="${user.location}"> <i class="bi bi-house-heart fa-fw pe-1"></i> Quê quán: <strong th:text="${user.hometown}"></strong> </li>
+                                </ul>
+                            </div>
+                            <!-- Card body END -->
+                        </div>
+                    </div>
+                    <!-- Card END -->
+                </div>
+
+            </div>
+            <!-- Right sidebar END -->
+
+        </div> <!-- Row END -->
+    </div>
+</body>
+</html>

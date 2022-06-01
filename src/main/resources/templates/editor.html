@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Viết bài - My Blog</title>
+
+    <script src="https://cdn.tiny.cloud/1/souy9o75yqw0j2ootcc8koeu9yn3zunkr9ylhgp4kel4gd4i/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script src="https://cdn.tiny.cloud/1/souy9o75yqw0j2ootcc8koeu9yn3zunkr9ylhgp4kel4gd4i/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script>
+        function previewImage() {
+            postImg.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
+
+    <script>
+        tinymce.init({
+            selector: 'textarea#editor',
+            skin: 'bootstrap',
+            plugins: 'lists, link, image, media',
+            toolbar: 'h1 h2 bold italic strikethrough blockquote bullist numlist backcolor | link image media | removeformat help',
+            menubar: false,
+        });
+    </script>
+
+</head>
+
+<body>
+    <header class="p-3 bg-secondary text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none me-lg-auto">
+                    <span class="fs-4">My Blog</span>
+                </a>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-auto w-50"></form>
+
+                <div>
+                    <a href="/post/write"><button type="button" class="btn btn-primary me-2">Viết bài</button></a>
+                </div>
+                <div class="text-end">
+                    <div class="dropdown">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle me-lg-auto" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img th:if="${user != null && user.avatar != null}" th:src="@{'data:image/jpeg;base64,' + ${user.avatar}}" width="32" height="32" class="rounded-circle">
+                            <img th:unless="${user != null && user.avatar != null}" src="https://scontent.fhan3-1.fna.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-7&_nc_sid=7206a8&_nc_ohc=tMdrVb3iZvcAX8WFLjc&_nc_ht=scontent.fhan3-1.fna&oh=00_AT-D6yqwikgu0xvqKNNYbzwcdCy2KWTpeDz62uiUuNNG5w&oe=62BE9A78" width="32" height="32" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser">
+                            <li><a class="dropdown-item" href="/user">Bài viết của bạn</a></li>
+                            <li><a class="dropdown-item" href="#">Bình luận của bạn</a></li>
+                            <li><a class="dropdown-item" href="#">Nháp của bạn</a></li>
+                            <li><a class="dropdown-item" href="/user/setting">Tuỳ chỉnh tài khoản</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" th:action="@{/logout}">
+                                    <input type="submit" class="w-100 btn btn-sm btn-primary" value="Đăng xuất"/>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container-fluid mt-5">
+        <form method="post" th:action="@{/post/write}" enctype="multipart/form-data">
+            <input class="w-50 mb-5" type="text" name="title" placeholder="Nhập tiêu đề bài viết">
+            <div class="mb-5">
+                <textarea maxlength="100" name="summary" class="form-control" aria-label="With textarea" placeholder="Mô tả bài viết"></textarea>
+            </div>
+            <textarea id="editor" name="content"></textarea>
+            <div class="mt-3">
+                <div>
+                    <label class="form-label">Chọn ảnh đại diện bài viết</label>
+                    <input name="postImage" class="form-control" type="file" onchange="previewImage()">
+                </div>
+                <img width="366" height="auto" id="postImg"/>
+            </div>
+            <div class="mt-3">
+                <select name="categoryTitle"  class="form-select-sm" aria-label="">
+                    <option selected>Chọn thể loại</option>
+                    <option value="QUAN ĐIỂM - TRANH LUẬN">QUAN ĐIỂM - TRANH LUẬN</option>
+                    <option value="THỂ THAO">THỂ THAO</option>
+                    <option value="GAME">GAME</option>
+                    <option value="PHIM">PHIM</option>
+                    <option value="SÁCH">SÁCH</option>
+                    <option value="SÁNG TÁC">SÁNG TÁC</option>
+                    <option value="ÂM NHẠC">ÂM NHẠC</option>
+                    <option value="DU LỊCH - ẨM THỰC">DU LỊCH - ẨM THỰC</option>
+                    <option value="KHOA HỌC">KHOA HỌC</option>
+                    <option value="KỸ NĂNG">KỸ NĂNG</option>
+                </select>
+            </div>
+
+            <div class="mt-3">
+                <input type="submit" class="btn btn-primary" value="Đăng bài"></input>
+            </div>
+        </form>
+    </div>
+</body>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</html>

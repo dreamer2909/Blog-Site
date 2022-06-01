@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http:/ /www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Blog</title>
+    <title>My Blog</title>
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="p-3 bg-secondary text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none me-lg-auto">
+                    <span class="fs-4">MyBlog</span>
+                </a>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-auto w-50">
+                    <input type="search" class="form-control form-control-dark" placeholder="Tìm kiếm tiêu đề..." aria-label="Search">
+                </form>
+
+                <div th:if="${loggedIn}">
+                    <a href="/post/write"><button type="button" class="btn btn-primary me-2">Viết bài</button></a>
+                </div>
+                <div th:if="${loggedIn}" class="text-end">
+                    <div class="dropdown">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle me-lg-auto" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img th:if="${user != null && user.avatar != null}" th:src="@{'data:image/jpeg;base64,' + ${user.avatar}}" width="32" height="32" class="rounded-circle">
+                            <img th:unless="${user != null && user.avatar != null}" src="https://scontent.fhan3-1.fna.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-7&_nc_sid=7206a8&_nc_ohc=tMdrVb3iZvcAX8WFLjc&_nc_ht=scontent.fhan3-1.fna&oh=00_AT-D6yqwikgu0xvqKNNYbzwcdCy2KWTpeDz62uiUuNNG5w&oe=62BE9A78" width="32" height="32" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser">
+                            <li><a class="dropdown-item" href="/user">Bài viết của bạn</a></li>
+                            <li><a class="dropdown-item" href="#">Bình luận của bạn</a></li>
+                            <li><a class="dropdown-item" href="#">Nháp của bạn</a></li>
+                            <li><a class="dropdown-item" href="/user/setting">Tuỳ chỉnh tài khoản</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" th:action="@{/logout}">
+                                    <input type="submit" class="w-100 btn btn-sm btn-primary" value="Đăng xuất"/>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div th:unless="${loggedIn}" class="text-end">
+                    <a href="/login"><button type="button" class="btn btn-outline-light me-2">Đăng nhập</button></a>
+                    <a href="/register"><button type="button" class="btn btn-warning">Đăng ký</button></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="p-3 bg-secondary">
+        <div class="container">
+            <div class="nav-scroller py-1 mb-2">
+                <nav class="nav d-flex justify-content-between text-white">
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/debate">QUAN ĐIỂM - TRANH LUẬN</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/sport">THỂ THAO</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/game">GAME</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/movie">PHIM</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/book">SÁCH</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/create">SÁNG TÁC</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/music">ÂM NHẠC</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/travel-food">DU LỊCH - ẨM THỰC</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/science">KHOA HỌC</a>
+                    <a class="p-2 link-secondary text-decoration-none text-white" href="/category/skill">KỸ NĂNG</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
