@@ -18,20 +18,48 @@
                 alert("Mật khẩu xác nhận không đúng")
                 return false
             }
-            else alert("Đăng ký thành công")
             return true
+        }
+
+        function validation() {
+            let username = document.getElementById("username").value
+            let displayName = document.getElementById("displayName").value
+            let password = document.getElementById("password").value
+
+            if (username.trim().length < 7) {
+                alert("Tên đăng nhập phải ít nhất 7 ký tự")
+                return false
+            }
+
+            if (displayName.trim().length === 0) {
+                alert("Tên hiển thị không được để trống")
+                return false
+            }
+
+            if (password.length < 7) {
+                alert("Mật khẩu phải ít nhất 7 ký tự")
+                return false
+            }
+            return true
+        }
+
+        function onSubmit() {
+            if (validation() && matchPassword()) {
+                alert("Đăng ký thành công")
+                return true
+            }
+            return false
         }
     </script>
 </head>
 <body>
     <main class="form-signin mx-auto w-25 my-5">
-        <form method="POST" th:action="@{/register}" onsubmit="return matchPassword()">
+        <form method="POST" th:action="@{/register}" onsubmit="return onSubmit()">
             <h1 class="h3 mb-3 fw-normal text-center">MyBlog</h1>
 
             <div class="form-floating my-3">
                 <input type="text" class="form-control" id="username" name="username" placeholder="Tên tài khoản" required>
                 <label for="username">Tên tài khoản</label>
-
             </div>
             <div class="form-floating my-3">
                 <input type="text" class="form-control" id="displayName" name="displayName" placeholder="Tên hiển thị" required>

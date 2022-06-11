@@ -60,8 +60,8 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public String changePassword(@AuthenticationPrincipal User user, @RequestParam String password) {
-        user.setPassword(passwordEncoder.encode(password));
+    public String changePassword(@AuthenticationPrincipal User user, @RequestParam String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         return "redirect:/user/setting";
     }
@@ -95,4 +95,5 @@ public class UserController {
         userRepository.save(user);
         return "redirect:/user/setting";
     }
+
 }

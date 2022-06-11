@@ -19,8 +19,8 @@
                     <span class="fs-4">MyBlog</span>
                 </a>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-auto w-50">
-                    <input type="search" class="form-control form-control-dark" placeholder="Tìm kiếm tiêu đề..." aria-label="Search">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-auto w-50" method="post" action="/post/search">
+                    <input type="search" name="title" class="form-control form-control-dark" placeholder="Tìm kiếm tiêu đề..." aria-label="Search">
                 </form>
 
                 <div th:if="${loggedIn}">

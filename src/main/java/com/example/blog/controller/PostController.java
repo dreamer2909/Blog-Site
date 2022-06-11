@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +48,20 @@ public class PostController {
     @GetMapping("/write")
     public String writingView() {
         return "editor";
+    }
+
+    @PostMapping("/search")
+    public String searchPost(@RequestParam String title, Model model) {
+        List<Post> posts = postRepository.findAll();
+        List<Post> res = new ArrayList<>();
+        title = title.trim().toLowerCase();
+        for (Post post: posts) {
+            if (post.getTitle().toLowerCase().contains(title)) {
+                res.add(post);
+            }
+        }
+        model.addAttribute("posts", res);
+        return "search";
     }
 
     @PostMapping("/write")

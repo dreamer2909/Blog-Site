@@ -1,9 +1,7 @@
 package com.example.blog.model;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
@@ -23,7 +21,7 @@ public class Post {
     private String content;
     @Column(length = 10000)
     private String summary;
-    private Date createdAt;
+    private Date createdAt = new Date();
     @Lob
     private String postImage;
 
@@ -34,6 +32,10 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+//    @ManyToOne
+//    @JoinColumn(name = "series_id")
+//    private Series series;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostComment> comments = new ArrayList<>();

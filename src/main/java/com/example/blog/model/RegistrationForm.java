@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,10 +16,15 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegistrationForm {
+    @NotNull
+    @Size(min = 5, message = "Tên đăng nhập phải ít nhất 5 ký tự")
     private String username;
+    @NotBlank(message = "Tên hiển thị không được để trống")
     private String displayName;
     private String gender;
     private String day, month, year;
+    @NotNull
+    @Size(min = 7, message = "Mật khẩu phải ít nhất 7 ký tự")
     private String password;
     private String confirmPassword;
 

@@ -4,6 +4,7 @@ import com.example.blog.model.Post;
 import com.example.blog.model.User;
 import com.example.blog.repository.PostRepository;
 import com.example.blog.repository.UserRepository;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,16 +36,23 @@ public class AdminController {
         return "admin";
     }
 
-//    @PostMapping("/lock")
-//    public String lockUser(@RequestParam String username) {
-//        User user = userRepository.findUserByUsername(username);
-//        userRepository.save(user);
-//        return "redirect:/admin/user";
-//    }
+    @PostMapping("/lock")
+    public String lockUser(@RequestParam String username) {
+        User user = userRepository.findUserByUsername(username);
+        user.setLocked(!user.isLocked());
+        userRepository.save(user);
+        return "redirect:/admin";
+    }
 
-    @DeleteMapping("/post/delete/{id}")
+    @PostMapping("/post/delete/{id}")
     public String deletePost(@PathVariable long id) {
         postRepository.deleteById(id);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/user/delete/{id}")
+    public String deleteUser(@PathVariable long id) {
+        userRepository.deleteById(id);
         return "redirect:/admin";
     }
 }

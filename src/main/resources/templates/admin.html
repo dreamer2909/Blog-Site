@@ -55,13 +55,22 @@
                             </a>
                         </td>
                         <td>
-                            <form method="post" action="/admin/lock">
-                                <input type="hidden" name="username" th:value="${user.username}">
-                                <input type="submit" class="btn btn-primary" value="Lock">
+                            <div th:if="${user.isAccountNonLocked()}">
+                                <form method="post" action="/admin/lock">
+                                    <input type="hidden" name="username" th:value="${user.username}">
+                                    <input type="submit" class="btn btn-primary" value="Lock">
+                                </form>
+                            </div>
+                            <div th:unless="${user.isAccountNonLocked()}">
+                                <form method="post" action="/admin/lock">
+                                    <input type="hidden" name="username" th:value="${user.username}">
+                                    <input type="submit" class="btn btn-primary" value="Unlock">
+                                </form>
+                            </div>
                             </form>
                         </td>
                         <td>
-                            <form method="post">
+                            <form method="post" th:action="@{/admin/user/delete/{id}(id=${user.id})}">
                                 <input type="submit" class="btn btn-primary" value="Delete">
                             </form>
                         </td>

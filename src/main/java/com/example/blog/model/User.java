@@ -35,10 +35,12 @@ public class User implements UserDetails {
     private String backgroundImage;
 
     @OneToMany(mappedBy = "user")
-    private List<Post> posts = new ArrayList<>();
+    private List<Post> posts = new LinkedList<>();
 
     @OneToMany(mappedBy = "user")
     private List<PostComment> comments = new ArrayList<>();
+
+    private boolean locked = false;
 
     public User(String username, String displayName, String gender, Date dob, String password) {
         this.username = username;
@@ -58,7 +60,7 @@ public class User implements UserDetails {
     }
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked;
     }
     @Override
     public boolean isCredentialsNonExpired() {
